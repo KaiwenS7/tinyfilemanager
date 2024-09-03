@@ -3757,7 +3757,8 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         .nav {direction:rtl;}
         .nav-item.avatar a { cursor:pointer;text-transform:capitalize; }
         .nav-item.avatar a > i { font-size:15px; }
-        .nav-item.avatar .dropdown-menu a { font-size:13px; }
+        .nav-item.avatar .dropdown-menu a { font-size:13px;}
+        .dropdown-menu-right {right: 0 !important;left: auto !important;}
         #search-addon { font-size:12px;border-right-width:0; }
         .brl-0 { background:transparent;border-left:0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
         .brr-0 { border-top-right-radius: 0; border-bottom-right-radius: 0; }
