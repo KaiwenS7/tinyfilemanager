@@ -1,6 +1,6 @@
 <?php
 //Default Configuration
-$CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":false,"theme":"light"}';
+$CONFIG = '{"lang":"en","error_reporting":true,"show_hidden":false,"hide_Cols":true,"theme":"dark"}';
 
 /**
  * H3K | Tiny File Manager V2.5.3
@@ -13,14 +13,14 @@ $CONFIG = '{"lang":"en","error_reporting":false,"show_hidden":false,"hide_Cols":
 define('VERSION', '2.5.3');
 
 //Application Title
-define('APP_TITLE', 'Tiny File Manager');
+define('APP_TITLE', 'Tracers Directory Index');
 
 // --- EDIT BELOW CONFIGURATION CAREFULLY ---
 
 // Auth with login/password
 // set true/false to enable/disable it
 // Is independent from IP white- and blacklisting
-$use_auth = true;
+$use_auth = false;
 
 // Login user name and password
 // Users: array('Username' => 'Password', 'Username2' => 'Password2', ...)
@@ -37,7 +37,7 @@ $readonly_users = array(
 );
 
 // Global readonly, including when auth is not being used
-$global_readonly = false;
+$global_readonly = true;
 
 // user specific directories
 // array('Username' => 'Directory path', 'Username2' => 'Directory path', ...)
@@ -80,7 +80,7 @@ $datetime_format = 'm/d/Y g:i A';
 // 'full' => show full path
 // 'relative' => show path relative to root_path
 // 'host' => show path on the host
-$path_display_mode = 'full';
+$path_display_mode = 'relative';
 
 // Allowed file extensions for create and rename files
 // e.g. 'txt,html,css,js'
@@ -184,7 +184,7 @@ $cfg = new FM_Config();
 $lang = isset($cfg->data['lang']) ? $cfg->data['lang'] : 'en';
 
 // Show or hide files and folders that starts with a dot
-$show_hidden_files = isset($cfg->data['show_hidden']) ? $cfg->data['show_hidden'] : true;
+$show_hidden_files = isset($cfg->data['show_hidden']) ? $cfg->data['show_hidden'] : false;
 
 // PHP error reporting - false = Turns off Errors, true = Turns on Errors
 $report_errors = isset($cfg->data['error_reporting']) ? $cfg->data['error_reporting'] : true;
@@ -193,7 +193,7 @@ $report_errors = isset($cfg->data['error_reporting']) ? $cfg->data['error_report
 $hide_Cols = isset($cfg->data['hide_Cols']) ? $cfg->data['hide_Cols'] : true;
 
 // Theme
-$theme = isset($cfg->data['theme']) ? $cfg->data['theme'] : 'light';
+$theme = isset($cfg->data['theme']) ? $cfg->data['theme'] : 'dark';
 
 define('FM_THEME', $theme);
 
@@ -2132,7 +2132,14 @@ $tableTheme = (FM_THEME == "dark") ? "text-white bg-dark table-dark" : "bg-white
                 $date_sorting = strtotime(date("F d Y H:i:s.", $modif_raw));
                 $filesize_raw = fm_get_size($path . '/' . $f);
                 $filesize = fm_get_filesize($filesize_raw);
-                $filelink = '?p=' . urlencode(FM_PATH) . '&amp;view=' . urlencode($f);
+
+                // Adding direct loading for html and php files -Kevin
+                if(strpos($f, ".html") || strpos($f, ".php")){
+                    $filelink = fm_enc(FM_ROOT_URL . (FM_PATH != '' ? '/' . FM_PATH : '') . '/' . $f);
+                }else{
+                    $filelink = '?p=' . urlencode(FM_PATH) . '&amp;view=' . urlencode($f);
+                }
+
                 $all_files_size += $filesize_raw;
                 $perms = substr(decoct(fileperms($path . '/' . $f)), -4);
                 if (function_exists('posix_getpwuid') && function_exists('posix_getgrgid')) {
@@ -3490,7 +3497,7 @@ class FM_Zipper_Tar
         $this->data = array(
             'lang' => 'en',
             'error_reporting' => true,
-            'show_hidden' => true
+            'show_hidden' => false
         );
         $data = false;
         if (strlen($CONFIG)) {
@@ -3747,6 +3754,7 @@ $isStickyNavBar = $sticky_navbar ? 'navbar-fixed' : 'navbar-normal';
         a, a:hover, a:visited, a:focus { text-decoration:none !important; }
         .filename, td, th { white-space:nowrap  }
         .navbar-brand { font-weight:bold; }
+        .nav {direction:rtl;}
         .nav-item.avatar a { cursor:pointer;text-transform:capitalize; }
         .nav-item.avatar a > i { font-size:15px; }
         .nav-item.avatar .dropdown-menu a { font-size:13px; }
